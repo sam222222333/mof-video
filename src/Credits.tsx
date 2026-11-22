@@ -3,26 +3,18 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { BACKDROP_CSS, FONT, PAL } from "./style";
 
 /* ------------------------------------------------------------------------ *
- * CREDITS — six panels, each held for PER frames.
+ * CREDITS — three panels, each held for PER frames.
  *
  * Deliberately its own composition rather than the tail of FutureOfMofs: the
  * credits are not part of the argument, they are a separate card sequence, and
  * keeping them out means the Future section can stay cut to its narration.
  *
  *   1  references           every source the film actually leans on
- *   2  made with            the toolchain
- *   3  made by              placeholders until the names come in
- *   4  AI disclosure
- *   5  structure and visualisation   where the model came from, and which parts
- *                                    of the animation are illustrative
- *   6  source code & further info    where to get the code and how to reach us
- *
- * Panels 4-6 are word-for-word what the group agreed on.
+ *   2  made with            tools on the left, AI disclosure on the right
+ *   3  production           team, structure provenance, the repo link
  * ------------------------------------------------------------------------ */
 
-/* 169 frames per panel: six panels is 1014 frames, which puts the finished film at
- * 9748 frames = 324.93 s. It used to be 163/978 for an exact 9750, but the future
- * section lost 38 frames, so the panels absorbed most of the difference. */
+/* 169 frames per panel: three panels is 507 frames. */
 const PER = 169;
 const FADE = 14;
 
@@ -36,6 +28,8 @@ type Panel = {
   rows?: { name: string; role: string }[];
   /** Two columns sharing one page, so the closing block fits in fewer screens. */
   cols?: { head: string; lines: string[]; size: number; gap: number; x: number }[];
+  /** Optional vertical offset of the first body line; defaults to 352 (cols) / 372. */
+  y0?: number;
   /** Pinned to the bottom of the page: a label, the link itself, then a note. */
   foot?: { label: string; link: string; note: string };
 };
@@ -61,15 +55,41 @@ const PANELS: Panel[] = [
   },
   {
     head: "MADE WITH",
-    body: [
-      "Remotion 4 — React-based video, every frame is code",
-      "Three.js and @react-three/fiber for the 3-D scenes",
-      "Headless Chromium for rendering, FFmpeg for encoding",
-      "Crystal structures: QMOF qmof-8b5bb88 and COD 2300380",
-      "Narration recorded separately and transcribed with Whisper",
-    ],
+    body: [],
     size: 24,
-    gap: 52,
+    gap: 50,
+    y0: 430,
+    cols: [
+      {
+        head: "TOOLS",
+        lines: [
+          "Remotion 4 — React-based video, every frame is code",
+          "Three.js and @react-three/fiber for the 3-D scenes",
+          "Headless Chromium for rendering, FFmpeg for encoding",
+          "Crystal structures: QMOF qmof-8b5bb88 and COD 2300380",
+          "Narration recorded separately and transcribed with Whisper",
+        ],
+        size: 19,
+        gap: 40,
+        x: 120,
+      },
+      {
+        head: "AI DISCLOSURE",
+        lines: [
+          "No AI-generated images or videos",
+          "were used in this production.",
+          "",
+          "AI tools assisted with code generation,",
+          "programming and debugging.",
+          "",
+          "All visual content was rendered",
+          "programmatically using Remotion.",
+        ],
+        size: 19,
+        gap: 34,
+        x: 1030,
+      },
+    ],
   },
   {
     head: "PRODUCTION",
@@ -120,17 +140,6 @@ const PANELS: Panel[] = [
       note: "contact us with any questions about the science, the visualisations or the process",
     },
   },
-  {
-    head: "AI DISCLOSURE",
-    body: [
-      "No AI-generated images or videos were used in this production.",
-      "AI tools were used to assist with code generation, programming and debugging.",
-      "All visual content was rendered programmatically using Remotion.",
-    ],
-    size: 24,
-    gap: 52,
-  },
-
 ];
 
 export const CREDITS_FRAMES = PANELS.length * PER;
@@ -146,7 +155,7 @@ export const Credits: FC = () => {
   const p = PANELS[idx];
   // Two-column pages put their own headings inside each column, so the shared
   // title has to sit above them and the body starts lower.
-  const y0 = p.cols ? 352 : 372;
+  const y0 = p.y0 ?? (p.cols ? 352 : 372);
 
   return (
     <AbsoluteFill style={{ background: BACKDROP_CSS, fontFamily: FONT }}>

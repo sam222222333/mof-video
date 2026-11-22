@@ -6,7 +6,7 @@ import { InorganicExp } from "./InorganicExp";
 import { OrganicVideo, ORGANIC_VIDEO_FRAMES as ORGANIC_NEW_FRAMES } from "./organic-v2/OrganicVideo";
 import { ColourFull, COLOUR_FULL_FRAMES } from "./colour/ColourFull";
 import { Applications } from "./applications/Applications";
-import { FutureOfMofs, FUTURE_FRAMES } from "./future/FutureOfMofs";
+import { FutureVideo, FUTURE_VIDEO_FRAMES } from "./future/FutureVideo";
 import { Credits, CREDITS_FRAMES } from "./Credits";
 
 /* ------------------------------------------------------------------------ *
@@ -34,11 +34,11 @@ const INORGANIC = 1853;
 const ORGANIC = ORGANIC_NEW_FRAMES; // 2094, includes the 3-D paddlewheel insert
 const COLOUR = COLOUR_FULL_FRAMES; // 1291
 const CURRENT = 1150;
-const FUTURE = FUTURE_FRAMES; // 1180
-const CREDITS = CREDITS_FRAMES; // 676
+const FUTURE = FUTURE_VIDEO_FRAMES; // 1548
+const CREDITS = CREDITS_FRAMES; // 507
 
 export const ASSEMBLY_NEW_VO_CITE_FRAMES =
-  HOOK + GENERAL + INORGANIC + ORGANIC + COLOUR + CURRENT + FUTURE + CREDITS; // 9674
+  HOOK + GENERAL + INORGANIC + ORGANIC + COLOUR + CURRENT + FUTURE + CREDITS; // 9873
 
 export const AssemblyNewVOCite: FC = () => {
   const a = 0;
@@ -80,7 +80,7 @@ export const AssemblyNewVOCite: FC = () => {
           <Applications citations />
         </Sequence>
         <Sequence from={g} durationInFrames={FUTURE} name="08 future">
-          <FutureOfMofs citations />
+          <FutureVideo citations />
         </Sequence>
 
         <Sequence from={h} durationInFrames={CREDITS} name="09 credits">

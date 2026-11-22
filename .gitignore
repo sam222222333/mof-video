@@ -6,6 +6,10 @@ out/
 # The m4a stays in the repo; the wavs do not.
 public/*.wav
 
+# Exception: the assembled master is not reproducible from build-vo.sh (that
+# script only writes vo-assembly.wav), so it ships with the repo.
+!public/vo-assembly-new.wav
+
 # The pre-rendered clips and the figure are committed; the per-frame source
 # sequences behind them (public/node_geo/core/, public/node_geo/linker/) are not.
 public/node_geo/core/

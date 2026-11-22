@@ -2,17 +2,10 @@ import type { FC } from "react";
 import { AbsoluteFill, OffthreadVideo, staticFile, useCurrentFrame } from "remotion";
 import { FONT, PAL } from "../style";
 
-/**
- * The future section as a finished picture, supplied as a rendered file.
- *
- * It is 1548 frames at 30 fps, 1920x1080 — 51.6 s, ending on a black fade
- * after the closing card. Unlike the organic file this one carries its own
- * narration: it is played unmuted and takes over from the assembly's voice
- * track at this section's first frame (the track is cut there).
- *
- * The frame is a flat file, so the citation is overlaid here rather than
- * drawn inside the section.
- */
+/** Future section as a finished render: 1548 frames, 30 fps, 1920x1080, 51.6 s.
+ *  Carries its own narration, so it plays unmuted and the assembly's voice
+ *  track is cut at this section's first frame. Citations are overlaid here
+ *  because the picture is a flat file. */
 export const FUTURE_VIDEO_FRAMES = 1548;
 
 /** Conductive-MOF claim; sits over the conductive segment (26–30 s). */
@@ -23,7 +16,6 @@ const CITE_TO = 900;
 export const FutureVideo: FC<{ citations?: boolean }> = ({ citations = false }) => {
   const frame = useCurrentFrame();
   const inWindow = frame >= CITE_FROM && frame < CITE_TO;
-  // Same fade the other sections use for their citation layer.
   const o = Math.min(1, Math.max(0, (frame - CITE_FROM) / 24)) * 0.6;
 
   return (

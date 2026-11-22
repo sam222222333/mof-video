@@ -6,6 +6,7 @@ out/
 # The m4a stays in the repo; the wavs do not.
 public/*.wav
 
-# Pre-rendered glow mattes and other binaries are not committed.
-public/node_geo/
-public/figures/
+# The pre-rendered clips and the figure are committed; the per-frame source
+# sequences behind them (public/node_geo/core/, public/node_geo/linker/) are not.
+public/node_geo/core/
+public/node_geo/linker/

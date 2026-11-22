@@ -1,20 +1,20 @@
 # MOF: from node to application
 
 Remotion source for a five-minute explainer on metal–organic frameworks, using
-HKUST-1 as the worked example. Every scene is drawn in code (SVG, canvas or
-react-three-fiber). The only non-code material is the narration, one reproduced
-journal figure (Chui et al. 1999, Fig. 1, scene 02) and a few pre-rendered
-mattes for the node-geometry opening (scene 04).
+HKUST-1 as the worked example. Most scenes are drawn in code (SVG, canvas or
+react-three-fiber); sections 05 and 08 are flat renders supplied by the group and
+mounted as files. The rest of the non-code material is the narration, one
+reproduced journal figure (Chui et al. 1999, Fig. 1, scene 02) and a few
+pre-rendered mattes for the node-geometry opening (scene 04).
 
-**Running time 333.8 s (10014 frames at 30 fps):** seven sections (301.2 s,
-9036 frames) plus 32.6 s (978 frames) of silent closing credits. That assumes the
-new organic section (05, 2094 frames); until it is wired in, the code still
-builds the old one and the film is 325.0 s (9750 frames). See
-[Organic section v2](#organic-section-v2).
+**Running time 329.1 s (9873 frames at 30 fps):** seven sections (312.2 s,
+9366 frames) plus 16.9 s (507 frames) of silent closing credits. Sections 05 and
+08 are no longer drawn in code: they are the group's own renders, played as flat
+files (see [Organic section v2](#organic-section-v2) and [Future section](#future-section)).
 
-The film is `AssemblyVO`. `AssemblyVOCite` is the same film with source
-references drawn on screen. The master has no on-screen citations yet; see
-`CITATIONS-TODO.md`.
+The film is `AssemblyNewVO` and `AssemblyNewVOCite` (the same cut with source
+references drawn on screen). `AssemblyVO` / `AssemblyVOCite` are the earlier cut,
+9410 frames, kept for reference.
 
 ---
 
@@ -22,34 +22,35 @@ references drawn on screen. The master has no on-screen citations yet; see
 
 ```bash
 npm install
-bash scripts/build-vo.sh        # bake the narration WAVs (see Audio)
 npx remotion studio --no-open   # preview
 ```
 
 Render a single frame (fastest way to check something):
 
 ```bash
-npx remotion still AssemblyVO out/f1200.png --frame=1200 --gl=angle \
+npx remotion still AssemblyNewVO out/f1200.png --frame=1200 --gl=angle \
   --browser-executable="<path to Chrome>"
 ```
 
 Render the film:
 
 ```bash
-npx remotion render AssemblyVO out/film.mp4 --gl=angle \
+npx remotion render AssemblyNewVO out/film.mp4 --gl=angle \
   --browser-executable="<path to Chrome>"
 ```
 
 Chrome paths: macOS `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`,
 Linux `/usr/bin/google-chrome`. The two flags are only needed for the WebGL
-scenes (02's 3D part, 04, the paddlewheel clip in 05, 06). Without them the render hangs on "Getting
+scenes (02's 3D part, 04, 06). Without them the render hangs on "Getting
 composition", because Remotion's bundled headless shell has no WebGL here.
+Sections 05 and 08 are flat files and play without it, but the compositions they
+were made from still need it.
 
 **Requirements:** Node 18+ (developed on Node 24) and a system Chrome/Chromium.
 
 Render notes:
 
-- `AssemblyVO` is laid out at 1920×1080 and scaled by 0.6667, so it renders at
+- Both masters are laid out at 1920×1080 and scaled by 0.6667, so they render at
   1280×720. Review passes run at 720p to halve the render time.
 - `--scale=0.4444` is for stills only. For video the output height must be an
   integer (1080 × 0.4444 = 479.952 fails in `stitchFramesToVideo()`). Use `0.5`
@@ -64,10 +65,12 @@ Open Studio and use the folders on the left.
 
 | Composition | What it is |
 |---|---|
-| `AssemblyVO` | **The film.** Silent picture plus one audio track. |
-| `AssemblyVOCite` | Same film, with source references switched on. |
-| `Credits` | 09, six silent panels. |
-| `Hook`, `GeneralInfo`, `InorganicExp`, `OrganicLinkers`, `ColourFull`, `Applications`, `FutureOfMofs` | The seven sections, silent. These are what `AssemblyVO` mounts. |
+| `AssemblyNewVO` | **The film.** Seven sections plus credits, one audio track. |
+| `AssemblyNewVOCite` | Same film, with source references switched on. |
+| `AssemblyVO`, `AssemblyVOCite` | The earlier cut: old organic section (1830 frames) and old future section (1180). 9410 frames. |
+| `Credits` | 09, three silent panels (507 frames). |
+| `OrganicNew`, `FutureNew` | 05 and 08 as standalone files; the master mounts the flat renders instead. |
+| `Hook`, `GeneralInfo`, `InorganicExp`, `OrganicLinkers`, `ColourFull`, `Applications`, `FutureOfMofs` | The seven sections, silent. 05 and 08 are superseded by their renders. |
 | `*VO` (in the **VO** folder) | One section with its own narration, for reviewing a section alone. |
 | `WIP`, `Archive` folders | Experiments and superseded shots. Not in the film. |
 
@@ -84,21 +87,26 @@ now point at the colour section.
 src/
   index.ts, Root.tsx        registerRoot, every composition
   style.tsx                 palette, fonts, backdrops, SectionTitle
-  AssemblyVO.tsx            the film
-  AssemblyVOCite.tsx        the film with citations
+  AssemblyNewVO.tsx         the film
+  AssemblyNewVOCite.tsx     the film with citations
+  AssemblyVO.tsx, AssemblyVOCite.tsx   earlier cut, 9410 frames (superseded)
   Assembly.tsx              older silent assembly (superseded)
-  Credits.tsx               09  closing credits
+  Credits.tsx               09  closing credits, three panels
 
   hook/Hook.tsx             01  surface area, the tennis-court number
   hook/GeneralInfo.tsx      02  what a MOF is
   InorganicExp.tsx          04  node geometry, paddlewheel, HSAB, open site
   inorganic/                    NodeGeometry, PaddleV3, HsabFull (used);
                                 the rest are earlier versions
-  organic/                  05  OrganicLinkers (linker chemistry, BTC, hard/soft),
-                                LinkerScenes12, PaddleClip3D (3D paddlewheel), paddleModel
+  organic-v2/               05  OrganicLinkers (linker chemistry, BTC, hard/soft),
+                                LinkerScenes12, PaddleClip3D (3D paddlewheel),
+                                paddleModel, OrganicVideo (flat render)
+  organic/                  the earlier 05, 1830 frames (superseded)
   colour/                   06  ColourFull (2D opening + 3D scene), ColourScene
   applications/             07  catalysis, CO2 capture, gas storage, water
-  future/                   08  batch vs flow, drug delivery, conductive MOFs
+  future/                   08  FutureVideo (the render the master mounts),
+                                FutureOfMofs (drawn in code), FlowFuture
+  future-v2/                the supplied future section, pre-flattening
   vo/                       per-section compositions with their own audio
   data/                     paddlewheel and tiling JSON from the CIF
   quantum/, shot05/, team/  earlier explorations, not in the film
@@ -106,10 +114,15 @@ src/
 public/
   vo.m4a                    narration, 310.6 s, one take
   vo-quantum-new.m4a        the colour section, re-recorded (43.04 s)
+  vo-assembly-new.wav       the master track, cut at 260.6 s (7818 frames)
+  organic-final.mp4         05 as the group rendered it (2094 frames, muted)
+  future-section-with-audio.mp4   08 as the group rendered it (1548 frames,
+                                carries its own narration)
   figures/                  chui1999-fig1.png (scene 02)
   node_geo/                 mattes and footage for the node-geometry opening
+  doc/                      ASSISTANT-PROMPT.md, ORGANIC-SCRIPT.md
 
-scripts/build-vo.sh         bakes the per-section and master WAVs
+scripts/build-vo.sh         bakes the per-section WAVs (05 and 08 superseded)
 archive/                    two earlier snapshots (see below)
 ```
 
@@ -118,46 +131,30 @@ are earlier explorations kept for reference.
 
 ### Assets are not in git
 
-`.gitignore` excludes `public/figures/`, `public/node_geo/` and `public/*.wav`.
-The export zip includes the first two, but a fresh clone will not, and scenes
-02 and 04 break without them. Back them up separately. `vo.m4a` and
-`vo-quantum-new.m4a` are tracked.
+Almost everything is tracked, including the pre-rendered clips and the figure.
+Two things are not: the per-frame source sequences behind the node-geometry
+mattes (`public/node_geo/core/`, `public/node_geo/linker/`, ~1200 frames) and the
+per-section WAVs. The master track is the exception and ships as
+`public/vo-assembly-new.wav`.
 
 ---
 
 ## Audio
 
-The narration is one recording (`public/vo.m4a`), plus the re-recorded colour
-section (`public/vo-quantum-new.m4a`). Each section needs its own WAV because
-Studio ignores `<Audio startFrom>` and `<Audio endAt>`: several tracks all start
+The master is `public/vo-assembly-new.wav`: one track for the whole film, because
+Studio ignores `<Audio startFrom>` and `<Audio endAt>` — several tracks all start
 at frame zero and overlap.
 
-```bash
-bash scripts/build-vo.sh
-```
+The track covers sections 01–07, then stops at **260.6 s (7818 frames)**, the
+first frame of 08. Section 08 is a flat render that carries its own narration, and
+09 is silent by design — so the picture runs 507 frames past the end of the
+track, and the last 63.7 s of the film is not one continuous audio file.
 
-This writes `vo-hook`, `vo-general`, `vo-inorganic`, `vo-inorganic-exp`,
-`vo-organic`, `vo-quantum`, `vo-current`, `vo-future` and the concatenated master
-`vo-assembly.wav`.
-
-**The rebuild does not exactly reproduce the shipped audio.** Some sentence gaps
-were cut by hand and are not reproduced by the script:
-
-| Section | Effect of rebuilding |
-|---|---|
-| 04 inorganic and the inorganic-exp copy | About 1.3 s longer than the picture |
-| 05 organic | The script still cuts the old take (114.0–172.0667 s). The new narration and its 8 s silent insert are not in the script yet (see below) |
-| 08 future | About 7.5 s longer than the shipped track (225 frames of gaps kept) |
-
-`vo-assembly.wav` pads or trims every section to its picture length, so the
-master stays at 8772 frames, but narration inside those two sections will sit
-later than the picture. For frame-exact alignment, recut against the cue tables
-in the comments at the top of `src/vo/InorganicVO.tsx`, `src/InorganicExp.tsx`
-and `src/future/FutureOfMofs.tsx`. The per-sentence cue file `vo-timeline.json`
-is not in this export.
-
-The credits are silent by design, so `vo-assembly.wav` ends 32.6 s before the
-picture. That is not a bug.
+`bash scripts/build-vo.sh` still builds the older per-section WAVs and
+`vo-assembly.wav`; it does not produce `vo-assembly-new.wav` and its 05/08 cuts
+are out of date, so treat its output as a starting point, not the shipped track.
+For frame-exact 04, recut against the cue tables at the top of
+`src/vo/InorganicVO.tsx` and `src/InorganicExp.tsx`.
 
 ---
 
@@ -179,7 +176,8 @@ two differ slightly and both are labelled (see Known gaps).
 The narration was recorded in one take and transcribed with Whisper, giving
 per-sentence start and end frames. Every cut is placed on a sentence boundary or
 in the gap between two sentences. Where a gap was too long, the silence was cut
-and the picture shortened by the same amount.
+and the picture shortened by the same amount. That describes 01–07; 05 and 08
+arrive already cut to their own narration.
 
 ---
 
@@ -193,39 +191,37 @@ and the picture shortened by the same amount.
 - **Keep scenes pure.** No state, randomness or wall-clock time, or a re-render
   will not match.
 
-To get an AI assistant to extend this, see `docs/ASSISTANT-PROMPT.md`.
+To get an AI assistant to extend this, see `public/doc/ASSISTANT-PROMPT.md`.
 
 ---
 
 ## Organic section v2
 
-Section 05 was rebuilt with a new script (`docs/ORGANIC-SCRIPT.md`). It is **not
-yet wired into the master**. What changed:
+Section 05 was rebuilt by the group and now ships as a flat render:
+`public/organic-final.mp4`, 2094 frames / 69.8 s / 1920×1080, silent (the file
+arrived without audio, and the master track covers it). `organic-v2/OrganicVideo.tsx`
+mounts it.
 
-- **Length:** 2094 frames (69.8 s), up from 1830. 1854 frames are narrated and 240
-  (8.0 s) are a silent 3D paddlewheel clip (`PaddleClip3D.tsx`) that holds after
-  "the paddles of the paddlewheel".
-- **Content:** deprotonation and anionic donors, rigid core, BTC (MOF-199) with
-  three binding groups 120° apart, then hard (carboxylate) versus soft
-  (pyrazolate) donors, then linker length and pore size (UiO-66 → UiO-67).
-- **WebGL:** the paddlewheel clip uses three.js, so 05 now needs the Chrome flags.
-  The standalone package pinned `three ^0.170`; this repo uses `^0.187`.
-- **Audio:** the composition runs on the voice-over's own timeline through
-  `voFrame()`, which pauses the narration for `PADDLE_INSERT` (240) frames at
-  `PADDLE_AT` (frame 1295, 43.17 s). The voice-over edit must have exactly 8 s of
-  silence at that point.
+The code version it replaced is still in the same folder: `OrganicLinkers.tsx`,
+2094 frames, narration timed through `voFrame()` with a 240-frame silent
+paddlewheel insert at `PADDLE_AT` = frame 1295 (43.17 s). It is a useful reference
+for the timing, but the master no longer mounts it.
 
-To wire it in:
+Because the picture is a fixed file, the `citations` prop is drawn on top as an
+SVG overlay instead of inside the section.
 
-1. Replace `src/organic/` with the new folder and copy `src/data/paddlewheel-solvated.json`
-   if it differs.
-2. In `AssemblyVO.tsx` and `AssemblyVOCite.tsx`, set `ORGANIC` to `ORGANIC_FRAMES`
-   (2094) instead of `1830`, and update the frame totals in the comments.
-3. Rebuild the narration for 05 from the new recording with the 8 s of silence
-   inserted, and update `build-vo.sh` (organic trim, master concat length).
-4. Add the `citations` prop back to `OrganicLinkers`. The new component does not
-   take it, so `AssemblyVOCite` will not type-check and nothing is cited in 05.
-5. Update the Root.tsx organic duration (`Organic`, `OrganicVO`) to 2094.
+---
+
+## Future section
+
+08 was rebuilt by the group and ships as `public/future-section-with-audio.mp4`
+— 1548 frames / 51.6 s / 1920×1080, a flat render that **keeps its own
+narration**. `future/FutureVideo.tsx` mounts it unmuted; that is why the master
+track stops at this section's first frame (260.6 s).
+
+The code version it replaced is `FutureOfMofs.tsx` (1180 frames, narration in
+`public/future-vo.m4a`). It stays in the folder but is not mounted. As with 05,
+the `citations` prop is drawn as an SVG overlay on top of the file.
 
 ---
 
@@ -234,14 +230,14 @@ To wire it in:
 - **Two different Cu–Cu distances.** The 3D model is the 0 K DFT cell (2.457 Å).
   The 2.628 Å on screen is the room-temperature experimental value from Chui 1999.
   Both are labelled, but they are not the same measurement.
-- **No citations in the master.** `AssemblyVOCite` has them; the master does not.
-  Several are still missing or unchecked, and the credits list references that
-  are not placed on screen. Details in `CITATIONS-TODO.md`.
-- **Audio rebuild** drifts in 04 and 08, and has no new 05 narration yet (see Audio).
-- **Stale comments.** `AssemblyVO.tsx` and `AssemblyVOCite.tsx` say 8772 frames
-  and a 720-frame credits block. The credits block is 978 frames and the film is
-  9750 today (10014 with the new organic section).
-- `Assembly.tsx` uses older segment lengths and is silent. `AssemblyVO` is the
+- **Citations live in `AssemblyNewVOCite`, not in the master.** Several are still
+  missing or unchecked, and the credits list references that are not placed on
+  screen; there is no checked-off list in this repo yet.
+- **05 and 08 are fixed files now.** Changing their content means re-rendering the
+  source composition and replacing the mp4; the master cannot retime them.
+- **`build-vo.sh` is out of date.** It still cuts the old 05 and 08 narration and
+  does not produce `vo-assembly-new.wav` (see Audio).
+- `Assembly.tsx` uses older segment lengths and is silent. `AssemblyNewVO` is the
   master.
 
 ---

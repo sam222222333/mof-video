@@ -251,3 +251,13 @@ archive/v1-2026-11-21/   49 files, the export before credits and citations
 ```
 
 Each has an `ARCHIVE-NOTES.md` saying what it had and what did not exist yet.
+
+---
+
+## License
+
+Academic review only. See [LICENSE](LICENSE): the code and the renders are shared
+so the named group and their instructor can assess the work, and nothing here may
+be reused, redistributed or republished for any other purpose. Third-party
+material (the QMOF and COD structures, the Chui 1999 figure, the cited papers)
+stays under its own terms.

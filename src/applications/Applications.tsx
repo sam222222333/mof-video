@@ -124,10 +124,8 @@ const Tank: FC<{ cx: number; cy: number; w: number; h: number }> = ({ cx, cy, w,
 );
 
 /* ============================ CITATION LAYER ============================ */
-/* Only rendered by the citation cut (AssemblyVOCite). Kept out of the film
- * itself until every claim has a source; see CITATION-CHECK-2026-11-21.md. */
+/* Only rendered by the citation cut. Kept out of the film itself. */
 const APP_CITES: { b: number; text: string }[] = [
-  { b: 372, text: "catalysis — illustrative, no reference" },
   { b: 604, text: "D. Britt et al., Proc. Natl. Acad. Sci. U.S.A., 2008, 105, 11623." },
   { b: 962, text: "D. Britt et al., Proc. Natl. Acad. Sci. U.S.A., 2008, 105, 11623." },
   { b: 1e9, text: "G. Tian et al., Nanoscale, 2025, 17, 12340." },

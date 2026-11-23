@@ -25,7 +25,7 @@ import { Credits, CREDITS_FRAMES } from "./Credits";
  *                     beat 4 (rare earths, grid storage) has none yet
  *
  * Refs are drawn top-right, 21 px, muted, so they read at 720p without competing
- * with the beat. Full references live in CITATION-CHECK-2026-11-21.md.
+ * with the beat.
  * ------------------------------------------------------------------------ */
 
 const HOOK = 357;

@@ -230,9 +230,7 @@ the `citations` prop is drawn as an SVG overlay on top of the file.
 - **Two different Cu–Cu distances.** The 3D model is the 0 K DFT cell (2.457 Å).
   The 2.628 Å on screen is the room-temperature experimental value from Chui 1999.
   Both are labelled, but they are not the same measurement.
-- **Citations live in `AssemblyNewVOCite`, not in the master.** Several are still
-  missing or unchecked, and the credits list references that are not placed on
-  screen; there is no checked-off list in this repo yet.
+- **Citations live in `AssemblyNewVOCite`**
 - **05 and 08 are fixed files now.** Changing their content means re-rendering the
   source composition and replacing the mp4; the master cannot retime them.
 - **`build-vo.sh` is out of date.** It still cuts the old 05 and 08 narration and
